@@ -1,0 +1,29 @@
+server:
+  port: 9000
+  servlet:
+    context-path: /easy-oauth2
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 8
+      max-active: 24
+      min-idle: 4
+      maxWait: 60000
+      url: jdbc:mysql://localhost:3306/easy_oauth2?serverTimezone=Asia/Shanghai
+      username: root
+      password: Oracle
+      filters: stat,wall
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+    show-sql: true
+
+oauth2:
+  register-client:
+    secret-code: f78bcc2aa9b245349999b229c509253c
+  issuer: http://localhost:9000/easy-oauth2
