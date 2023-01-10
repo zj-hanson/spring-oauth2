@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60">
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <property name="LOG_PATH" value="d:/EAP-LOG/logs"/>
+    <property name="LOG_FILE" value="easy-oauth2.log"/>
+    <property name="MAX_FILE_SIZE" value="10MB"/>
+    <property name="PATTERN_FILE" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35}: %msg %n"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${PATTERN_FILE}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover 保存历史记录到这个文件夹一日起为后缀 -->
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>${MAX_FILE_SIZE}</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN_FILE}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>

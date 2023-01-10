@@ -29,4 +29,4 @@ logging:
 oauth2:
   register-client:
     secret-code: f78bcc2aa9b245349999b229c509253c
-  issuer: http://localhost:9000/easy-oauth2
+  issuer: http://dev.zj-hanson.com/easy-oauth2

@@ -11,7 +11,7 @@ spring:
       max-active: 24
       min-idle: 4
       maxWait: 60000
-      url: jdbc:mysql://localhost:3306/easy_oauth2?serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://172.16.128.7:3306/easy_oauth2?serverTimezone=Asia/Shanghai
       username: root
       password: Oracle
       filters: stat,wall
@@ -23,7 +23,10 @@ spring:
     database-platform: org.hibernate.dialect.MySQL57Dialect
     show-sql: true
 
+logging:
+  config: classpath:logback-spring.xml
+
 oauth2:
   register-client:
     secret-code: f78bcc2aa9b245349999b229c509253c
-  issuer: https://ssl.lightshell.cn/easy-oauth2
+  issuer: http://work.zj-hanson.com/easy-oauth2
