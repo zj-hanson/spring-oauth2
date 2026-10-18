@@ -1,18 +1,18 @@
-package com.lightshell.oauth2.config;
+package com.lightshell.oauth2.service;
 
-import com.lightshell.oauth2.entity.User;
-import com.lightshell.oauth2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import com.lightshell.oauth2.entity.User;
 
 /**
  * @author kevindong
  */
-@Component
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
@@ -25,6 +25,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("账号不存在");
         }
         return new org.springframework.security.core.userdetails.User(username, user.getPassword(),
-                AuthorityUtils.createAuthorityList("admin","USER","ROLE_system"));
+            AuthorityUtils.createAuthorityList("admin", "USER", "ROLE_system"));
     }
 }
