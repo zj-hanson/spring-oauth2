@@ -1,29 +1,24 @@
 server:
-  port: 9000
+  port: 8480
   servlet:
     context-path: /easy-oauth2
 
 spring:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    druid:
-      initial-size: 8
-      max-active: 24
-      min-idle: 4
-      maxWait: 60000
-      url: jdbc:mysql://localhost:3306/easy_oauth2?serverTimezone=Asia/Shanghai
-      username: root
-      password: Oracle
-      filters: stat,wall
-  jpa:
-    hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    database-platform: org.hibernate.dialect.MySQL57Dialect
-    show-sql: true
-
-oauth2:
-  register-client:
-    secret-code: f78bcc2aa9b245349999b229c509253c
-  issuer: https://ssl.lightshell.cn/easy-oauth2
+  application:
+    name: easy-oauth2
+  config:
+    import:
+      - optional:nacos:easy-oauth2.yaml
+  cloud:
+    nacos:
+      server-addr: nacos.zj-hanson.com:8848
+      username: dev
+      password: nacos
+      discovery:
+        namespace: @nacos.namespace@
+        port: 8480
+      config:
+        file-extension: yaml
+        namespace: @nacos.namespace@
+    inetutils:
+      preferred-networks: 172.16

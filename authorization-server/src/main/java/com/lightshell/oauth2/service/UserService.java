@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService implements SuperService<User> {
+public class UserService implements EntityService<User> {
 
     @Autowired
     UserRepository userRepository;

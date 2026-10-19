@@ -2,7 +2,7 @@ package com.lightshell.oauth2.service;
 
 import java.util.List;
 
-public interface SuperService<T> {
+public interface EntityService<T> {
 
     T save(T t);
 

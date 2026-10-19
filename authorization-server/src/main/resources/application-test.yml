@@ -1,0 +1,24 @@
+server:
+  port: 8480
+  servlet:
+    context-path: /easy-oauth2
+
+spring:
+  application:
+    name: easy-oauth2
+  config:
+    import:
+      - optional:nacos:easy-oauth2.yaml
+  cloud:
+    nacos:
+      server-addr: nacos.zj-hanson.com:8848
+      username: dev
+      password: nacos
+      discovery:
+        namespace: @nacos.namespace@
+        port: 8480
+      config:
+        file-extension: yaml
+        namespace: @nacos.namespace@
+    inetutils:
+      preferred-networks: 172.16
