@@ -1,18 +1,19 @@
 package com.lightshell.oauth2.service;
 
-import lombok.extern.slf4j.Slf4j;
+import java.time.Duration;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
-import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
-import org.springframework.security.oauth2.server.authorization.config.TokenSettings;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -32,9 +33,8 @@ public class RegisteredClientServiceImpl {
         RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString().replaceAll("-", ""))
             .clientId(clientId).clientSecret(passwordEncoder.encode(password))
             .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-            .authorizationGrantType(AuthorizationGrantType.PASSWORD)
-            .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN).scope(OidcScopes.OPENID).scope("any")
-            .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
+            .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN).scope(OidcScopes.OPENID).scope("all")
+            .scope("any").clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
             .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofSeconds(7200))
                 .reuseRefreshTokens(true).refreshTokenTimeToLive(Duration.ofSeconds(7800)).build())
             .build();

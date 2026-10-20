@@ -1,5 +1,6 @@
 package com.lightshell.oauth2.service;
 
+import com.lightshell.oauth2.common.EntityService;
 import com.lightshell.oauth2.entity.User;
 import com.lightshell.oauth2.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService implements SuperService<User> {
+public class UserService implements EntityService<User> {
 
     @Autowired
     UserRepository userRepository;
