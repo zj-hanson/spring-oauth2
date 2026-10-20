@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60">
-
+    <springProperty scope="context" name="app_name" source="spring.application.name"/>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <property name="LOG_PATH" value="/var/log/hanbell-unicorn"/>
-    <property name="LOG_FILE" value="easy-oauth2.log"/>
+    <property name="LOG_PATH" value="/var/log/hanson-unicorn/"/>
+    <property name="LOG_FILE" value="${app_name}"/>
     <property name="MAX_FILE_SIZE" value="10MB"/>
     <property name="MAX_HISTORY" value="30"/>
     <property name="TOTAL_SIZE_CAP" value="2GB"/>
@@ -18,8 +18,7 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/${LOG_FILE}</file>
-        <!-- 替换为 SizeAndTimeBasedRollingPolicy 支持大小+时间双滚动 -->
+        <file>${LOG_PATH}/${LOG_FILE}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- %i 分片索引，单文件10MB自动拆分，按天归档 -->
             <fileNamePattern>${LOG_PATH}/${LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
