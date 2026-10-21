@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -18,6 +19,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class RegisteredClientServiceImpl {
+
+    @Value("${oauth2.access-token-timeout:7200}")
+    private int accessTokenTimeout;
+
+    @Value("${oauth2.refresh-token-timeout:7800}")
+    private int refreshTokenTimeout;
 
     @Autowired
     private RegisteredClientRepository registeredClientRepository;
@@ -35,8 +42,8 @@ public class RegisteredClientServiceImpl {
             .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
             .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN).scope(OidcScopes.OPENID).scope("all")
             .scope("any").clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
-            .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofSeconds(7200))
-                .reuseRefreshTokens(true).refreshTokenTimeToLive(Duration.ofSeconds(7800)).build())
+            .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofSeconds(accessTokenTimeout))
+                .reuseRefreshTokens(true).refreshTokenTimeToLive(Duration.ofSeconds(refreshTokenTimeout)).build())
             .build();
         try {
             registeredClientRepository.save(registeredClient);

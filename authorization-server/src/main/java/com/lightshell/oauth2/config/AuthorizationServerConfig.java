@@ -1,5 +1,6 @@
 package com.lightshell.oauth2.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,14 +30,21 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
+import java.text.ParseException;
+
 /**
  * @author kevindong
  */
 @Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfig {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Value("${oauth2.issuer}")
     private String issuer;
+
+    @Value("${oauth2.jwk-set}")
+    private String jwkSetJson;
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -69,9 +77,14 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public JWKSource<SecurityContext> jwkSource() {
-        RSAKey rsaKey = Jwks.generateRsa();
-        JWKSet jwkSet = new JWKSet(rsaKey);
+    public JWKSource<SecurityContext> jwkSource() throws ParseException {
+        JWKSet jwkSet;
+        if (jwkSetJson != null) {
+            jwkSet = JWKSet.parse(jwkSetJson);
+        } else {
+            RSAKey rsaKey = Jwks.generateRsa();
+            jwkSet = new JWKSet(rsaKey);
+        }
         return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
     }
 

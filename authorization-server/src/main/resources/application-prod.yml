@@ -1,20 +1,23 @@
 server:
-  port: 9000
+  port: 8480
   servlet:
-    context-path: /easy-oauth2
+    context-path: /unicorn-oauth2
 
 spring:
   application:
-    name: easy-oauth2
+    name: unicorn-oauth2
   config:
     import:
-      - optional:nacos:easy-oauth2.yaml
+      - optional:nacos:unicorn-oauth2.yaml
   cloud:
     nacos:
+      server-addr: nacos.zj-hanson.com:8848
+      username: dev
+      password: nacos
+      discovery:
+        namespace: @nacos.namespace@
+        port: 8480
       config:
-        server-addr: nacos.zj-hanson.com:8848
-        username: dev
-        password: nacos
         file-extension: yaml
         namespace: @nacos.namespace@
         refresh-enabled: true

@@ -29,7 +29,7 @@ public class RegisteredClientController {
         String clientId = data.get("clientId");
         String pwd = data.get("pwd");
         String code = data.get("code");
-        if (clientId == null || pwd == null || "".equals(clientId) || "".equals(pwd) || !secret.equals(code)) {
+        if (clientId == null || pwd == null || clientId.isEmpty() || pwd.isEmpty() || !secret.equals(code)) {
             return new ResponseMessage("400", "Bad Request");
         }
         if (registeredClientService.isExists(clientId)) {
