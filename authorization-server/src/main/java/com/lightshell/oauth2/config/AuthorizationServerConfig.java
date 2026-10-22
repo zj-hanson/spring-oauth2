@@ -1,5 +1,6 @@
 package com.lightshell.oauth2.config;
 
+import com.lightshell.oauth2.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
@@ -29,6 +32,8 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
+import java.text.ParseException;
+
 /**
  * @author kevindong
  */
@@ -37,6 +42,12 @@ public class AuthorizationServerConfig {
 
     @Value("${oauth2.issuer}")
     private String issuer;
+
+    @Value("${oauth2.jwk-set}")
+    private String jwkSetJson;
+
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -74,9 +85,14 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public JWKSource<SecurityContext> jwkSource() {
-        RSAKey rsaKey = Jwks.generateRsa();
-        JWKSet jwkSet = new JWKSet(rsaKey);
+    public JWKSource<SecurityContext> jwkSource() throws ParseException {
+        JWKSet jwkSet;
+        if (jwkSetJson != null) {
+            jwkSet = JWKSet.parse(jwkSetJson);
+        } else {
+            RSAKey rsaKey = Jwks.generateRsa();
+            jwkSet = new JWKSet(rsaKey);
+        }
         return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
     }
 
@@ -88,6 +104,17 @@ public class AuthorizationServerConfig {
     @Bean
     public ProviderSettings providerSettings() {
         return ProviderSettings.builder().issuer(issuer).build();
+    }
+
+    @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    UserDetailsService userDetailsService() {
+        return userDetailsService;
     }
 
 }

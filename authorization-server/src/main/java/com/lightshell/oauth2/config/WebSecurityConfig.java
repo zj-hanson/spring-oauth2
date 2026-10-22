@@ -20,8 +20,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
+
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -31,17 +30,6 @@ public class WebSecurityConfig {
             .mvcMatchers("/", "/oauth2/**", "/register-client/**").permitAll().anyRequest().authenticated())
             .formLogin(withDefaults());
         return http.build();
-    }
-
-    @Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    UserDetailsService userDetailsService() {
-        return userDetailsService;
     }
 
 }
